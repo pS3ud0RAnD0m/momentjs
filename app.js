@@ -60,7 +60,7 @@ app.get('/uploads', (req, res) => {
                             <h6><span class="text-muted">Ain't nobody got time for that!</span></h6>
                             <a class="nav-link" href="/home">Home</a> |
                             <a class="nav-link" href="/upload">Upload</a> |
-                            <a class="nav-link" href="/uploads">Uploads</a> |
+                            <a class="nav-link" href="/uploads/">Uploads</a> |
                             <a class="nav-link" href="/moment">Moment</a>
                         </div>
                     </nav>
