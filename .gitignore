@@ -1,0 +1,11 @@
+*
+!*/
+
+!.gitignore
+!assets/**
+!uploads/
+!uploads/foo.js
+!app.js
+!package.json
+!package-lock.json
+!*.html

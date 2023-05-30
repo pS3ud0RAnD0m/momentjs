@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Moment.js Example</title>
+  <link rel="icon" type="image/x-icon" href="/assets/img/favicon.ico">
+  <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="/assets/css/dark-theme.css">
+  <script src="node_modules/moment/moment.js"></script>
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <h3>Moment.js Vuln Lab</h3>
+    <h6><span class="text-muted">Ain't nobody got time for that!</span></h6>
+    <a class="nav-link" href="/home">Home</a> |
+    <a class="nav-link" href="/upload">Upload</a> |
+    <a class="nav-link" href="/uploads">Uploads</a> |
+    <a class="nav-link" href="/moment">Moment</a>
+  </div>
+</nav>
+
+<!-- Main Content -->
+<div class="container mt-4">
+  <div class="card mt-3">
+    <div class="card-body">
+      <h1 class="card-title">Moment.js' Status:</h1>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">Moment.js' version is: <span id="momentVersion"></span></li>
+        <li class="list-group-item">Moment.js' locale is: <span id="momentLocale"></span></li>
+        <li class="list-group-item">Today is: <span id="date"></span></li>
+      </ul>
+
+      <h1 class="card-title">Moment.js Example:</h1>
+      <p id="currentDateTime"></p>
+      <p id="manipulatedDateTime"></p>
+
+      <h1 class="card-title">Curl examples:</h1>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">GET:
+          <ul class="list-group">
+            <li class="list-group-item">curl http://localhost:8000/moment?localeId=en-gb</li>
+            <li class="list-group-item">curl http://localhost:8000/moment?localeId=../../../../momentjs-traverse-testing</li>
+          </ul>
+        </li>
+        <li class="list-group-item">POST:
+          <ul class="list-group">
+            <li class="list-group-item">curl http://notLocalhost:8000/moment -d 'localeId=en-gb'</li>
+            <li class="list-group-item">curl http://notLocalhost:8000/moment -d '{'localeId':'en-gb'}' -H 'Content-Type: application/json'</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<script>
+  document.getElementById("momentVersion").innerHTML = moment.version;
+  document.getElementById("momentLocale").innerHTML = moment.locale();
+  document.getElementById("date").innerHTML = moment().format("dddd, MMMM Do YYYY");
+
+  const now = moment();
+  document.getElementById('currentDateTime').textContent = `Current Date and Time: ${now}`;
+
+  const manipulatedDateTime = now.add(7, 'days').subtract(1, 'months').calendar();
+  document.getElementById('manipulatedDateTime').textContent = `Manipulated Date and Time: ${manipulatedDateTime}`;
+</script>
+
+<script src="/assets/js/jquery.min.js"></script>
+<script src="/assets/js/bootstrap.min.js"></script>
+</body>
+</html>
