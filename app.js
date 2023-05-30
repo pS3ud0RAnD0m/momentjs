@@ -27,7 +27,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Routes
 app.get('/home', (req, res) => {
-    res.sendFile(path.join(__dirname, 'home.html'));
+    res.sendFile(path.join(__dirname, 'assets/html/home.html'));
 });
 
 app.get('/node_modules/moment/moment.js', (req, res) => {
@@ -83,7 +83,7 @@ app.get('/uploads', (req, res) => {
 
 app.route('/upload')
     .get((req, res) => {
-        sendFile(res, 'upload.html');
+        sendFile(res, 'assets/html/upload.html');
     })
     .post(upload.single('fileInput'), (req, res) => {
         const filename = req.file.filename;
@@ -99,7 +99,7 @@ app.route('/moment')
     //.get((req, res) => res.send(generateMomentResponse(req.query.localeId, req.socketremoteAddress === '127.0.0.1')))
     //.post((req, res) => res.send(generateMomentResponse(req.body.localeId, req.socketremoteAddress === '127.0.0.1')));
     .get((req, res) => {
-        sendFile(res, 'moment.html');
+        sendFile(res, 'assets/html/moment.html');
     })
     //.post
 
