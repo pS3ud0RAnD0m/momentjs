@@ -1,1 +1,1 @@
-console.log("Hello. This is uploads/test.js");
+console.log("Hello Node console! This is /uploads/test.js.");
