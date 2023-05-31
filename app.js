@@ -26,60 +26,63 @@ app.use('/assets', express.static(path.join(__dirname, 'assets')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Routes
-app.get('/home', (req, res) => {
-    res.sendFile(path.join(__dirname, 'assets/html/home.html'));
-});
+app.route('/home')
+    .get((req, res) => {
+        res.sendFile(path.join(__dirname, 'assets/html/home.html'));
+    });
 
-app.get('/node_modules/moment/moment.js', (req, res) => {
-    sendFile(res, 'node_modules/moment/moment.js');
-});
+app.route('/node_modules/moment/moment.js')
+    .get((req, res) => {
+        sendFile(res, 'node_modules/moment/moment.js');
+    });
 
-app.get('/uploads', (req, res) => {
-    fs.readdir(path.join(__dirname, 'uploads'), (err, files) => {
-        if (err) {
-            console.error(err);
-            res.status(500).send('Internal Server Error');
-        } else {
-            const fileHTML = files
-                .map(file => `<li><a href="/uploads/${file}">${file}</a></li>`)
-                .join('');
-            const html = `
-                <!DOCTYPE html>
-                <html lang="en">
-                <html>
-                    <head>
-                        <link rel="icon" type="image/x-icon" href="/assets/img/favicon.ico">
-                        <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.css">
-                        <link rel="stylesheet" type="text/css" href="/assets/css/dark-theme.css">
-                    </head>
-                    <body>
-                    <!-- Navbar -->
-                    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                        <div class="container-fluid">
-                            <h3>Moment.js Vuln Lab</h3>
-                            <h6><span class="text-muted">Ain't nobody got time for that!</span></h6>
-                            <a class="nav-link" href="/home">Home</a> |
-                            <a class="nav-link" href="/upload">Upload</a> |
-                            <a class="nav-link" href="/uploads/">Uploads</a> |
-                            <a class="nav-link" href="/moment">Moment</a>
-                        </div>
-                    </nav>
-                    <!-- Main Content -->
-                    <div class="container mt-4">
-                        <div class="card mt-3">
-                            <div class="card-body">
-                                <h4 class="card-title">Uploaded files:</h4>
-                                <ul>${fileHTML}</ul>
+app.route('/uploads')
+    .get((req, res, next) => {
+        fs.readdir(path.join(__dirname, 'uploads'), (err, files) => {
+            if (err) {
+                console.error(err);
+                next(err);
+            } else {
+                const fileHTML = files
+                    .map(file => `<li><a href="/uploads/${file}">${file}</a></li>`)
+                    .join('');
+                const html = `
+                    <!DOCTYPE html>
+                    <html lang="en">
+                    <html>
+                        <head>
+                            <link rel="icon" type="image/x-icon" href="/assets/img/favicon.ico">
+                            <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.css">
+                            <link rel="stylesheet" type="text/css" href="/assets/css/dark-theme.css">
+                        </head>
+                        <body>
+                        <!-- Navbar -->
+                        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                            <div class="container-fluid">
+                                <h3>Moment.js Vuln Lab</h3>
+                                <h6><span class="text-muted">Ain't nobody got time for that!</span></h6>
+                                <a class="nav-link" href="/home">Home</a> |
+                                <a class="nav-link" href="/upload">Upload</a> |
+                                <a class="nav-link" href="/uploads/">Uploads</a> |
+                                <a class="nav-link" href="/moment">Moment</a>
+                            </div>
+                        </nav>
+                        <!-- Main Content -->
+                        <div class="container mt-4">
+                            <div class="card mt-3">
+                                <div class="card-body">
+                                    <h4 class="card-title">Uploaded files:</h4>
+                                    <ul>${fileHTML}</ul>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    </body>
-              </html>
-            `;
-            res.send(html);
-        }
+                        </body>
+                  </html>
+                `;
+                res.send(html);
+            }
+        });
     });
-});
 
 app.route('/upload')
     .get((req, res) => {
@@ -108,9 +111,14 @@ app.route('/moment')
         res.send(generateMomentResponse(req.body.localeId, req.socket.remoteAddress));
     });
 
-
 app.all('*', (req, res) => {
     res.redirect(302, '/home');
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something went wrong!');
 });
 
 // Helpers
@@ -122,7 +130,7 @@ function generateMomentResponse(localeId, clientIp) {
     const allServerIPs = getAllServerIPs();
     if (allServerIPs.includes(clientIp)) {
         response.Warning =
-            'You are accessing this server from one of the server IP addresses. Traversal testing will be affected.';
+            'You are accessing this server from one of the server IP addresses. Traversal testing may be affected.';
     }
     return response;
 }
