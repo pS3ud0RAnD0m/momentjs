@@ -25,18 +25,20 @@
 <div class="container mt-4">
   <div class="card mt-3">
     <div class="card-body">
-      <h1 class="card-title">Moment.js' Status:</h1>
+      <h1 class="card-title">Moment.js' status:</h1>
       <ul class="list-group list-group-flush">
         <li class="list-group-item">Moment.js' version is: <span id="momentVersion"></span></li>
         <li class="list-group-item">Moment.js' locale is: <span id="momentLocale"></span></li>
         <li class="list-group-item">Today is: <span id="date"></span></li>
       </ul>
 
-      <h1 class="card-title">Moment.js Example:</h1>
-      <p id="currentDateTime"></p>
-      <p id="manipulatedDateTime"></p>
+      <h1 class="card-title">Moment.js examples:</h1>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item" id="currentDateTime"></li>
+        <li class="list-group-item" id="manipulatedDateTime"></li>
+      </ul>
 
-      <h1 class="card-title">Examples:</h1>
+      <h1 class="card-title">Locale update examples:</h1>
       <ul class="list-group list-group-flush">
         <li class="list-group-item">GET:
           <ul class="list-group">
@@ -50,6 +52,13 @@
             <li class="list-group-item">curl http://notLocalhost:8000/moment -d '{'localeId':'en-gb'}' -H 'Content-Type: application/json'</li>
           </ul>
         </li>
+      </ul>
+
+      <h1 class="card-title">A few observations ..</h1>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">Once a js file has been executed, node will not execute that SAME file again until the server is restarted.</li>
+        <li class="list-group-item">foo</li>
+        <li class="list-group-item">foo</li>
       </ul>
     </div>
   </div>
