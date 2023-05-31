@@ -4,7 +4,7 @@
 !.gitignore
 !assets/**
 !uploads/
-!uploads/foo.js
+!uploads/test.js
 !app.js
 !package.json
 !package-lock.json
