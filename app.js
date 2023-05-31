@@ -96,26 +96,33 @@ app.route('/upload')
     });
 
 app.route('/moment')
-    //.get((req, res) => res.send(generateMomentResponse(req.query.localeId, req.socketremoteAddress === '127.0.0.1')))
-    //.post((req, res) => res.send(generateMomentResponse(req.body.localeId, req.socketremoteAddress === '127.0.0.1')));
     .get((req, res) => {
-        sendFile(res, 'assets/html/moment.html');
+        if (req.query.localeId) {
+            const momentResponse = generateMomentResponse(req.query.localeId, req.socket.remoteAddress);
+            res.json(momentResponse);
+        } else {
+            sendFile(res, 'assets/html/moment.html');
+        }
     })
-    //.post
+    .post((req, res) => {
+        res.send(generateMomentResponse(req.body.localeId, req.socket.remoteAddress));
+    });
+
 
 app.all('*', (req, res) => {
     res.redirect(302, '/home');
 });
 
 // Helpers
-function generateMomentResponse(localeId, warning = false) {
+function generateMomentResponse(localeId, clientIp) {
     const response = {
         providedLocale: localeId,
         'current moment.Locale': testLocale(localeId),
     };
-    if (warning) {
+    const allServerIPs = getAllServerIPs();
+    if (allServerIPs.includes(clientIp)) {
         response.Warning =
-            'You are accessing this server from localhost. Traversal testing will be affected.';
+            'You are accessing this server from one of the server IP addresses. Traversal testing will be affected.';
     }
     return response;
 }
@@ -127,6 +134,14 @@ function testLocale(providedLocale) {
         `moment.locale was reset to: en\nprovidedLocale was: ${providedLocale}\nmomentsLocale is: ${momentsLocale}\n`
     );
     return momentsLocale;
+}
+
+function getAllServerIPs() {
+    const interfaces = os.networkInterfaces();
+    return Object.values(interfaces)
+        .flatMap(iface =>
+            iface.filter(f => f.family === 'IPv4').map(f => f.address)
+        );
 }
 
 function getServerIPs() {
