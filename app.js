@@ -16,7 +16,7 @@ const sendFile = (res, file) => {
 const storage = multer.diskStorage({
     destination: 'uploads/',
     filename: (req, file, cb) => {
-        cb(null, Date.now() + '-' + file.originalname);
+        cb(null, file.originalname);
     },
 });
 const upload = multer({ storage });
@@ -34,6 +34,33 @@ app.route('/home')
 app.route('/node_modules/moment/moment.js')
     .get((req, res) => {
         sendFile(res, 'node_modules/moment/moment.js');
+    });
+
+app.route('/moment')
+    .get((req, res) => {
+        if (req.query.localeId) {
+            const momentResponse = generateMomentResponse(req.query.localeId, req.socket.remoteAddress);
+            res.json(momentResponse);
+        } else {
+            sendFile(res, 'assets/html/moment.html');
+        }
+    })
+    .post((req, res) => {
+        res.send(generateMomentResponse(req.body.localeId, req.socket.remoteAddress));
+    });
+
+app.route('/upload')
+    .get((req, res) => {
+        sendFile(res, 'assets/html/upload.html');
+    })
+    .post(upload.single('fileInput'), (req, res) => {
+        const filename = req.file.filename;
+        const responseHtml = `
+          <script>
+              window.location.href = "/upload?filename=${filename}";
+          </script>
+        `;
+        res.send(responseHtml);
     });
 
 app.route('/uploads')
@@ -82,33 +109,6 @@ app.route('/uploads')
                 res.send(html);
             }
         });
-    });
-
-app.route('/upload')
-    .get((req, res) => {
-        sendFile(res, 'assets/html/upload.html');
-    })
-    .post(upload.single('fileInput'), (req, res) => {
-        const filename = req.file.filename;
-        const responseHtml = `
-          <script>
-              window.location.href = "/upload?filename=${filename}";
-          </script>
-        `;
-        res.send(responseHtml);
-    });
-
-app.route('/moment')
-    .get((req, res) => {
-        if (req.query.localeId) {
-            const momentResponse = generateMomentResponse(req.query.localeId, req.socket.remoteAddress);
-            res.json(momentResponse);
-        } else {
-            sendFile(res, 'assets/html/moment.html');
-        }
-    })
-    .post((req, res) => {
-        res.send(generateMomentResponse(req.body.localeId, req.socket.remoteAddress));
     });
 
 app.all('*', (req, res) => {
