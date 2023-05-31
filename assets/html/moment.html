@@ -74,14 +74,13 @@
 
   const manipulatedDateTime = now.add(7, 'days').subtract(1, 'months').calendar();
   document.getElementById('manipulatedDateTime').textContent = `Manipulated Date and Time: ${manipulatedDateTime}`;
-  fetch('/getServerIp')
+  fetch('/getserverip')
           .then(response => response.json())
           .then(data => {
             const serverIP = data.serverIP;
             const port = 8000;
             document.getElementById('getLink1').href = `http://${serverIP}:${port}/moment?localeId=en-gb`;
             document.getElementById('getLink1').innerText = `http://${serverIP}:${port}/moment?localeId=en-gb`;
-
             document.getElementById('getLink2').href = `http://${serverIP}:${port}/moment?localeId=../../../uploads/test`;
             document.getElementById('getLink2').innerText = `http://${serverIP}:${port}/moment?localeId=../../../uploads/test`;
           })
