@@ -25,40 +25,41 @@
 <div class="container mt-4">
   <div class="card mt-3">
     <div class="card-body">
-      <h1 class="card-title">Moment.js' status:</h1>
+      <h4 class="card-title">Moment.js' status:</h4>
       <ul class="list-group list-group-flush">
         <li class="list-group-item">Moment.js' version is: <span id="momentVersion"></span></li>
         <li class="list-group-item">Moment.js' locale is: <span id="momentLocale"></span></li>
         <li class="list-group-item">Today is: <span id="date"></span></li>
       </ul>
 
-      <h1 class="card-title">Moment.js examples:</h1>
+      <h4 class="card-title">Moment.js examples:</h4>
       <ul class="list-group list-group-flush">
         <li class="list-group-item" id="currentDateTime"></li>
         <li class="list-group-item" id="manipulatedDateTime"></li>
       </ul>
 
-      <h1 class="card-title">Locale update examples:</h1>
+      <h4 class="card-title">Locale update examples:</h4>
       <ul class="list-group list-group-flush">
-        <li class="list-group-item">GET:
-          <ul class="list-group">
-            <li class="list-group-item"><a href="http://10.0.11.201:8000/moment?localeId=en-gb">http://10.0.11.201:8000/moment?localeId=en-gb</a></li>
-            <li class="list-group-item"><a href="http://10.0.11.201:8000/moment?localeId=../../../uploads/test">http://10.0.11.201:8000/moment?localeId=../../../uploads/test</a></li>
-          </ul>
-        </li>
-        <li class="list-group-item">POST:
-          <ul class="list-group">
-            <li class="list-group-item">curl http://notLocalhost:8000/moment -d 'localeId=en-gb'</li>
-            <li class="list-group-item">curl http://notLocalhost:8000/moment -d '{'localeId':'en-gb'}' -H 'Content-Type: application/json'</li>
-          </ul>
-        </li>
+        <ul class="list-group">
+          <li class="list-group-item"><a id="getLink1" href="#"></a></li>
+          <li class="list-group-item"><a id="getLink2" href="#"></a></li>
+        </ul>
       </ul>
 
-      <h1 class="card-title">A few observations ..</h1>
+      <h4 class="card-title">A few observations:</h4>
       <ul class="list-group list-group-flush">
+        <li class="list-group-item">There is not a need to include the uploaded file's '.js' extension, but it is added to the examples for clarity.</li>
         <li class="list-group-item">Once a JavaScript file has been included, Node will not include that SAME file again until the server is restarted. Thus, you should restart the server or use multiple files for testing.</li>
-        <li class="list-group-item">foo</li>
-        <li class="list-group-item">foo</li>
+        <li class="list-group-item">..</li>
+      </ul>
+
+      <h4 class="card-title">Todo</h4>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">Add an example that validates out-of-band.</li>
+        <li class="list-group-item">Add an example that provides greater impact.</li>
+        <li class="list-group-item">Enable switching of Moment.js versions.</li>
+        <li class="list-group-item">Fully evaluate the weaksauce patch and provide all identified bypasses.</li>
+        <li class="list-group-item">..</li>
       </ul>
     </div>
   </div>
@@ -73,6 +74,18 @@
 
   const manipulatedDateTime = now.add(7, 'days').subtract(1, 'months').calendar();
   document.getElementById('manipulatedDateTime').textContent = `Manipulated Date and Time: ${manipulatedDateTime}`;
+  fetch('/getServerIp')
+          .then(response => response.json())
+          .then(data => {
+            const serverIP = data.serverIP;
+            const port = 8000;
+            document.getElementById('getLink1').href = `http://${serverIP}:${port}/moment?localeId=en-gb`;
+            document.getElementById('getLink1').innerText = `http://${serverIP}:${port}/moment?localeId=en-gb`;
+
+            document.getElementById('getLink2').href = `http://${serverIP}:${port}/moment?localeId=../../../uploads/test`;
+            document.getElementById('getLink2').innerText = `http://${serverIP}:${port}/moment?localeId=../../../uploads/test`;
+          })
+          .catch(error => console.error('Error:', error));
 </script>
 
 <script src="/assets/js/jquery.min.js"></script>

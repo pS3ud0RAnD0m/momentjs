@@ -26,6 +26,12 @@ app.use('/assets', express.static(path.join(__dirname, 'assets')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Routes
+app.route('/getserverip')
+    .get((req, res) => {
+        const serverIPs = getServerIPs();
+        res.json({ serverIP: serverIPs[0] });
+    });
+
 app.route('/home')
     .get((req, res) => {
         res.sendFile(path.join(__dirname, 'assets/html/home.html'));
