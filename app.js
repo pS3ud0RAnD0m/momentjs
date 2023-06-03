@@ -27,9 +27,13 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Routes
 app.route('/getserverip')
-    .get((req, res) => {
-        const serverIPs = getServerIPs();
-        res.json({ serverIP: serverIPs[0] });
+    .get(function (req, res) {
+        let serverIP = req.connection.remoteAddress;
+        if (serverIP.substr(0, 7) == "::ffff:") {
+            serverIP = serverIP.substr(7);
+        }
+        const port = req.connection.localPort;
+        res.json({ serverIP: serverIP, port: port });
     });
 
 app.route('/home')
