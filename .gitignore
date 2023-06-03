@@ -2,11 +2,11 @@
 !*/
 
 !.gitignore
+!app.js
 !assets/**
+!package.json
+!package-lock.json
 !uploads/
 !uploads/test1.js
 !uploads/test2.js
 !uploads/test3.js
-!app.js
-!package.json
-!package-lock.json
