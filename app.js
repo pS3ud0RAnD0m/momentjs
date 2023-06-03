@@ -28,7 +28,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // Routes
 app.route('/getserverip')
     .get(function (req, res) {
-        let serverIP = req.connection.remoteAddress;
+        let serverIP = req.connection.localAddress;
         if (serverIP.substr(0, 7) == "::ffff:") {
             serverIP = serverIP.substr(7);
         }
