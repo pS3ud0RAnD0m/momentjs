@@ -49,14 +49,14 @@ app.route('/node_modules/moment/moment.js')
 app.route('/moment')
     .get((req, res) => {
         if (req.query.localeId) {
-            const momentResponse = generateMomentResponse(req.query.localeId, req.socket.remoteAddress);
+            const momentResponse = getMomentResponse(req.query.localeId, req.socket.remoteAddress);
             res.json(momentResponse);
         } else {
             sendFile(res, 'assets/html/moment.html');
         }
     })
     .post((req, res) => {
-        res.send(generateMomentResponse(req.body.localeId, req.socket.remoteAddress));
+        res.send(getMomentResponse(req.body.localeId, req.socket.remoteAddress));
     });
 
 app.route('/upload')
@@ -132,10 +132,10 @@ app.use((err, req, res, next) => {
 });
 
 // Helpers
-function generateMomentResponse(localeId, clientIp) {
+function getMomentResponse(localeId, clientIp) {
     const response = {
         providedLocale: localeId,
-        'current moment.Locale': testLocale(localeId),
+        'current moment.Locale': setLocale(localeId),
     };
     const allServerIPs = getAllServerIPs();
     if (allServerIPs.includes(clientIp)) {
@@ -143,15 +143,6 @@ function generateMomentResponse(localeId, clientIp) {
             'You are accessing this server from one of the server IP addresses. Traversal testing may be affected.';
     }
     return response;
-}
-
-function testLocale(providedLocale) {
-    moment.locale('en');
-    const momentsLocale = moment.locale(providedLocale);
-    console.log(
-        `moment.locale was reset to: en\nprovidedLocale was: ${providedLocale}\nmomentsLocale is: ${momentsLocale}\n`
-    );
-    return momentsLocale;
 }
 
 function getAllServerIPs() {
@@ -168,6 +159,21 @@ function getServerIPs() {
         .flatMap(iface =>
             iface.filter(f => f.family === 'IPv4' && !f.internal).map(f => f.address)
         );
+}
+
+// Taken from weaksauce patch applied in Moment v2.29.2
+function isLocaleNameSane(name) {
+    // Prevent names that look like filesystem paths, i.e contain '/' or '\'
+    return name.match('^[^/\\\\]*$') != null;
+}
+
+function setLocale(providedLocale) {
+    moment.locale('en');
+    const momentsLocale = moment.locale(providedLocale);
+    console.log(
+        `moment.locale was reset to: en\nprovidedLocale was: ${providedLocale}\nmomentsLocale is: ${momentsLocale}\n`
+    );
+    return momentsLocale;
 }
 
 // Start server

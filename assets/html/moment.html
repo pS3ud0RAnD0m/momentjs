@@ -51,8 +51,8 @@
       <ul class="list-group list-group-flush">
         <li class="list-group-item">There is not a need to include the uploaded file's '.js' extension, but it is added to the examples for clarity.</li>
         <li class="list-group-item">Any file extension can be used. For example /uploads/test.txt can be called with 'localeId=../../../uploads/test4.txt'. This significantly increases the likelihood of posting a malicious js file to the server for Node to 'require'. The only way to increase impact from here would be to directly append or breakout of the require statement and bypass the need for LFI all together.</li>
-        <li class="list-group-item">Once a JavaScript file has been required by the loadLocale function, Node will not require (nor execute) that SAME file again until the server is restarted. Thus, you should restart the server or use multiple files for testing.</li>
-        <li class="list-group-item">Reassignment of 'require' or 'import' may indicate a directory-based source is utilized, since this is a common reason for reassigning.</li>
+        <li class="list-group-item">Once a JavaScript file has been loaded by the loadLocale function via 'require', Node caches it. Subsequent attempts to load the SAME file will not result in re-execution. Thus, you should restart the server or use multiple files for testing.</li>
+        <li class="list-group-item"></li>
         <li class="list-group-item">..</li>
       </ul>
 
@@ -60,9 +60,8 @@
       <ul class="list-group list-group-flush">
         <li class="list-group-item">ID if possible to do a remote 'require' both with and without a new module. Need be, try having node pull down file and then 'require' it.</li>
         <li class="list-group-item">ID if possible to breakout or append to the 'require'.</li>
-        <li class="list-group-item">Enable switching of Moment.js versions.</li>
-        <li class="list-group-item">Fully evaluate the weaksauce patch and provide all identified bypasses.</li>
-        <li class="list-group-item">Look into other repos that also reassign '<a href="https://github.com/search?q=%22+%3D+require%3B%22+language%3AJavaScript&type=code&l=JavaScript">require</a>' or '<a href="https://github.com/search?q=%22+%3D+import%3B%22+language%3AJavaScript&type=code&l=JavaScript">import</a>'.</li>
+        <li class="list-group-item">ID if there are any bypasses to the current patch.</li>
+        <li class="list-group-item">Reassignment of 'require' or 'import' may indicate a directory-based source is utilized, since this is a common reason for reassigning. Look into other repos that also reassign '<a href="https://github.com/search?q=%22+%3D+require%3B%22+language%3AJavaScript&type=code&l=JavaScript">require</a>' or '<a href="https://github.com/search?q=%22+%3D+import%3B%22+language%3AJavaScript&type=code&l=JavaScript">import</a>'.</li>
         <li class="list-group-item">..</li>
       </ul>
     </div>
