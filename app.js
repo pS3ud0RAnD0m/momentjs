@@ -161,7 +161,7 @@ function getServerIPs() {
         );
 }
 
-// Taken from weaksauce patch applied in Moment v2.29.2
+// Taken from Moment v2.29.2's patch
 function isLocaleNameSane(name) {
     // Prevent names that look like filesystem paths, i.e contain '/' or '\'
     return name.match('^[^/\\\\]*$') != null;
