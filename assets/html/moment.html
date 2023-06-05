@@ -64,7 +64,6 @@
         <li class="list-group-item">There is not a need to include the uploaded file's '.js' extension, but it is added to the examples for clarity.</li>
         <li class="list-group-item">Any file extension can be used. For example /uploads/test.txt can be called with 'localeId=../../../uploads/test4.txt'. This significantly increases the likelihood of posting a malicious js file to the server for Node to 'require'. The only way to increase impact from here would be to directly append or breakout of the require statement and bypass the need for LFI all together.</li>
         <li class="list-group-item">Once a JavaScript file has been loaded by the loadLocale function via 'require', Node caches it. Subsequent attempts to load the SAME file will not result in re-execution. Thus, you should restart the server or use multiple files for testing.</li>
-        <li class="list-group-item"></li>
         <li class="list-group-item">..</li>
       </ul>
 
