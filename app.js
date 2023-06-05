@@ -26,14 +26,14 @@ app.use('/assets', express.static(path.join(__dirname, 'assets')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Routes
-app.route('/getserverip')
+app.route('/serveripport')
     .get(function (req, res) {
-        let serverIP = req.connection.localAddress;
+        const serverIP = req.connection.localAddress;
         if (serverIP.substr(0, 7) == "::ffff:") {
             serverIP = serverIP.substr(7);
         }
-        const port = req.connection.localPort;
-        res.json({ serverIP: serverIP, port: port });
+        const serverPort = req.connection.localPort;
+        res.json({ serverIP: serverIP, serverPort: serverPort });
     });
 
 app.route('/home')

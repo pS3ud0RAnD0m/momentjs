@@ -28,3 +28,6 @@ a {
     color: #0af; /* Bright blue for links */
 }
 
+ select {
+     color: black;
+ }

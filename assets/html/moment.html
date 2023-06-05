@@ -6,10 +6,18 @@
   <link rel="icon" type="image/x-icon" href="/assets/img/favicon.ico">
   <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.css">
   <link rel="stylesheet" type="text/css" href="/assets/css/dark-theme.css">
+  <script src="/assets/js/jquery.min.js"></script>
+  <script src="/assets/js/bootstrap.min.js"></script>
   <script src="../../node_modules/moment/moment.js"></script>
+  <script>
+    $(document).ready(function(){
+      $("select").change(function(){
+        location.reload();
+      });
+    });
+  </script>
 </head>
 <body>
-<!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
     <h3>Moment.js Vuln Lab</h3>
@@ -21,7 +29,6 @@
   </div>
 </nav>
 
-<!-- Main Content -->
 <div class="container mt-4">
   <div class="card mt-3">
     <div class="card-body">
@@ -36,6 +43,11 @@
       <ul class="list-group list-group-flush">
         <li class="list-group-item" id="currentDateTime"></li>
         <li class="list-group-item" id="manipulatedDateTime"></li>
+        <li class="list-group-item">
+          <label for="dropdown"></label><select id="dropdown">
+            <option>Select locale</option>
+          </select> (This feature is not fully working yet)
+        </li>
       </ul>
 
       <h4 class="card-title">Locale update examples:</h4>
@@ -77,26 +89,37 @@
 
   const manipulatedDateTime = now.add(7, 'days').subtract(1, 'months').calendar();
   document.getElementById('manipulatedDateTime').textContent = `Manipulated Date and Time: ${manipulatedDateTime}`;
-  fetch('/getserverip')
+  fetch('/serveripport')
           .then(response => response.json())
           .then(data => {
             const serverIP = data.serverIP;
-            const port = 8000;
-            document.getElementById('getLink1').href = `http://${serverIP}:${port}/moment?localeId=en-gb`;
-            document.getElementById('getLink1').innerText = `http://${serverIP}:${port}/moment?localeId=en-gb`;
-            document.getElementById('getLink2').href = `http://${serverIP}:${port}/moment?localeId=../../../uploads/test1.js`;
-            document.getElementById('getLink2').innerText = `http://${serverIP}:${port}/moment?localeId=../../../uploads/test1.js`;
-            document.getElementById('getLink3').href = `http://${serverIP}:${port}/moment?localeId=../../../uploads/test2.js`;
-            document.getElementById('getLink3').innerText = `http://${serverIP}:${port}/moment?localeId=../../../uploads/test2.js`;
-            document.getElementById('getLink4').href = `http://${serverIP}:${port}/moment?localeId=../../../uploads/test3.js`;
-            document.getElementById('getLink4').innerText = `http://${serverIP}:${port}/moment?localeId=../../../uploads/test3.js`;
-            document.getElementById('getLink5').href = `http://${serverIP}:${port}/moment?localeId=../../../uploads/test4.txt`;
-            document.getElementById('getLink5').innerText = `http://${serverIP}:${port}/moment?localeId=../../../uploads/test4.txt`;
-          })
-          .catch(error => console.error('Error:', error));
+            const serverPort = data.serverPort;
+            document.getElementById('getLink1').href = `http://${serverIP}:${serverPort}/moment?localeId=en-gb`;
+            document.getElementById('getLink1').innerText = `http://${serverIP}:${serverPort}/moment?localeId=en-gb`;
+            document.getElementById('getLink2').href = `http://${serverIP}:${serverPort}/moment?localeId=../../../uploads/test1.js`;
+            document.getElementById('getLink2').innerText = `http://${serverIP}:${serverPort}/moment?localeId=../../../uploads/test1.js`;
+            document.getElementById('getLink3').href = `http://${serverIP}:${serverPort}/moment?localeId=../../../uploads/test2.js`;
+            document.getElementById('getLink3').innerText = `http://${serverIP}:${serverPort}/moment?localeId=../../../uploads/test2.js`;
+            document.getElementById('getLink4').href = `http://${serverIP}:${serverPort}/moment?localeId=../../../uploads/test3.js`;
+            document.getElementById('getLink4').innerText = `http://${serverIP}:${serverPort}/moment?localeId=../../../uploads/test3.js`;
+            document.getElementById('getLink5').href = `http://${serverIP}:${serverPort}/moment?localeId=../../../uploads/test4.js`;
+            document.getElementById('getLink5').innerText = `http://${serverIP}:${serverPort}/moment?localeId=../../../uploads/test4.js`;
+          });
+  document.getElementById("dropdown").onchange = function() {
+    const selectedLocale = this.value;
+    fetch(`/moment?localeId=${selectedLocale}`)
+            .then(response => response.json())
+            .then(data => {
+              moment.locale(data.locale);
+              document.getElementById('momentLocale').textContent = moment.locale();
+            });
+  };
+  const locales = ["af", "ar", "en-uk", "en-us", "zh-mo", "zh-tw"];
+  $(document).ready(function() {
+    $.each(locales, function(i, p) {
+      $('#dropdown').append($('<option></option>').val(p).html(p));
+    });
+  });
 </script>
-
-<script src="/assets/js/jquery.min.js"></script>
-<script src="/assets/js/bootstrap.min.js"></script>
 </body>
 </html>
